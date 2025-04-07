@@ -1,10 +1,23 @@
 package com.google.indie_grierbrianj.weatherapp
 
 import android.content.Intent
+import android.graphics.Insets
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
+import android.util.Size
+import android.view.DisplayCutout
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowManager
+import android.widget.ListView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -12,8 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowInsetsCompat
 import com.google.indie_grierbrianj.weatherapp.ui.theme.WeatherAppTheme
-import android.util.Log
 
 
 class MainActivity : ComponentActivity() {
@@ -23,6 +36,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+            val displayCutout = insets.displayCutout
+
+            Log.i(intentName, "displayCutout: $displayCutout")
+            if (displayCutout != null) {
+                val safeInsetTop = displayCutout.safeInsetTop
+                val safeInsetBottom = displayCutout.safeInsetBottom
+                val safeInsetLeft = displayCutout.safeInsetLeft
+                val safeInsetRight = displayCutout.safeInsetRight
+
+                // Log or use the cutout insets as needed
+               Log.i(intentName,"Safe Insets - Top: $safeInsetTop, Bottom: $safeInsetBottom, Left: $safeInsetLeft, Right: $safeInsetRight")
+            }
+            insets
+        }
 
         Log.i(intentName, "onCreate")
 
@@ -64,7 +94,8 @@ class MainActivity : ComponentActivity() {
         Log.i(intentName, "onPause")
         //
         // Make sure the keyboard is hidden when the app is paused
-        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         //
         // Also close any open dialog boxes as they will crash the app when it is recreated
         // if (dialog != null) {
@@ -97,6 +128,10 @@ class MainActivity : ComponentActivity() {
         //
         // put your code for inset and cutouts here
         //
+    }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        Log.i(intentName, "onDetachedFromWindow")
     }
 }
 
