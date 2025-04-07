@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
         window.decorView.setOnApplyWindowInsetsListener { view, insets ->
             val displayCutout = insets.displayCutout
 
+
             Log.i(intentName, "displayCutout: $displayCutout")
             if (displayCutout != null) {
                 val safeInsetTop = displayCutout.safeInsetTop
